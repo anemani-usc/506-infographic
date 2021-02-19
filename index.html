@@ -33,7 +33,7 @@ function ac_add_style(css){
 }
 ac_add_link('https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css');
 ac_add_style(document.getElementById("ac_style_countries-united-states-of-america").innerHTML);
-ac_add_style(".anychart-embed-countries-united-states-of-america{width:600px;height:450px;}");
+ac_add_style(".anychart-embed-countries-united-states-of-america{width:auto;height:auto;}");
 })();</script>
 <div id="container">
 </div>
@@ -47,12 +47,69 @@ anychart.onDocumentReady(function () {
     // See https://docs.anychart.com/Maps/Map_Projections
 
     // create data set
-    var dataSet = anychart.data.loadCsvFile("data.csv");
-
-
+    var dataSet = anychart.data.set([
+['US.OK',55, 1],
+['US.AR',56.1, 1],
+['US.HI',57.5, 1],
+['US.WV',57.6, 1],
+['US.TN',59.8, 1],
+['US.MS',60.2, 1],
+['US.TX',60.4, 1],
+['US.NM',61.3, 1],
+['US.IN',61.4, 1],
+['US.AL',63.1, 1],
+['US.NY',63.4, 1],
+['US.DC',64.1, 1],
+['US.ND',64.5, 1],
+['US.SC',64.5, 2],
+['US.LA',64.6, 2],
+['US.WY',64.6, 2],
+['US.KY',64.9, 2],
+['US.NV',65.4, 2],
+['US.MO',65.7, 2],
+['US.RI',65.7, 2],
+['US.AZ',65.9, 2],
+['US.KS',65.9, 2],
+['US.SD',66, 2],
+['US.IL',67, 2],
+['US.OH',67.4, 2],
+['US.GA',67.7, 2],
+['US.ID',68, 3],
+['US.CA',68.5, 5],
+['US.AK',68.8, 3],
+['US.UT',69.2, 3],
+['US.NE',69.9, 3],
+['US.DE',70.7, 3],
+['US.PA',71, 4],
+['US.MD',71.1, 4],
+['US.CT',71.5, 4],
+['US.NC',71.5, 4],
+['US.FL',71.7, 4],
+['US.MA',72.1, 4],
+['US.VA',73, 4],
+['US.MT',73.1, 4],
+['US.IA',73.2, 5],
+['US.MI',73.9, 5],
+['US.VT',74.2, 5],
+['US.NJ',75.3, 5],
+['US.NH',75.5, 5],
+['US.OR',75.5, 5],
+['US.WA',75.7, 5],
+['US.WI',75.8, 5],
+['US.ME',76.3, 5],
+['US.CO',76.4, 5],
+['US.MN',80, 5],
+    ]);
+	
+	console.log(dataSet);
     // create map chart
     var map = anychart.map();
     map.geoData(anychart.maps['united_states_of_america']);
+	
+    map.title().useHtml(true).hAlign('center');
+    map.title('<span style="font-size: 18px;">Voter Turnout & Voter Access </span>');
+	
+	
     //set bubble min/max size settings
     map.maxBubbleSize(30);
     map.minBubbleSize(5);
@@ -76,8 +133,10 @@ anychart.onDocumentReady(function () {
     series_1.selected().fill("#879CED");
 
     // set the select colors of series_2
-    series_2.selected().stroke("#3675BD");
-    series_2.selected().fill("#734CE6");
+    series_2.stroke("#0068BC");
+    series_2.selected().stroke("#0068BC");
+    series_2.selected().fill("#0068BC");
+    series_2.hovered().fill("#EBD670");
 
     // set the labels
     series_1.labels().fontColor('black');
@@ -90,14 +149,21 @@ anychart.onDocumentReady(function () {
     series_2.tooltip().format("{%seriesName} {%value}%");
 
     // set the colors and ranges for the scale
-    series_2.colorScale(anychart.scales.linearColor());
+    series_2.colorScale(anychart.scales.ordinalColor([
+
+{from:1, to:1,color:'#d1eeea'},
+{from:2, to:2, color:'#a8dbd9'},
+{from:3, to:3, color:'#68abb8'},
+{from:4, to:4, color:'#4f90a6'},
+{from:5, to:5, color:'#2a5674'},
+]));
 
     //set the single hue progression
-    var colors = anychart.color.singleHueProgression('#0068BC');
-
-    // define the colors
-    series_2.colorScale().colors(colors);
-
+	var colorRange = map.colorRange();
+	colorRange.enabled(true);
+	colorRange.orientation('right');
+	
+	
     // set container id for the chart
     map.container('container');
 
